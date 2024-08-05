@@ -19,12 +19,33 @@ def create_folder_if_not_exists(folder_path):
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
+def save_json_file(data, file_path='data.json', indent=4):
+    """
+    Save the scraped data to a JSON file.
+    
+    Parameters:
+    data (dict): Data to be saved.
+    file_path (str, optional): Path to the JSON file, including the file name. Defaults to 'data.json'.
+    indent (int, optional): Indentation level for the JSON file. Defaults to 4.
+    """
+    # Check if the directory of the provided file path exists
+    folder_path = os.path.dirname(file_path)
+    
+    if folder_path and not os.path.exists(folder_path):
+        try:
+            os.makedirs(folder_path)
+            print(f"Created directory: {folder_path}")
+        except Exception as e:
+            print(f"Failed to create directory {folder_path}: {e}")
+            return
 
-def save_json_file(data, file_name='data.json'):
-    """Save the scraped data to a JSON file."""
-    with open(os.path.join(json_folder_path, file_name), 'w') as json_file:
-        json.dump(data, json_file, indent=4)
-        print("Data saved to JSON file data.json")
+    # Write the JSON data to the file
+    try:
+        with open(file_path, 'w') as json_file:
+            json.dump(data, json_file, indent=indent)
+            print(f"Data successfully saved to {file_path}")
+    except Exception as e:
+        print(f"Failed to save data to {file_path}: {e}")
 
 
 def fetch_and_resize_image(image_url):
