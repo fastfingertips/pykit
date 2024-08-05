@@ -20,10 +20,10 @@ def create_folder_if_not_exists(folder_path):
         os.makedirs(folder_path)
 
 
-def save_json_file(scraped_data):
+def save_json_file(data, file_name='data.json'):
     """Save the scraped data to a JSON file."""
-    with open(os.path.join(json_folder_path, 'data.json'), 'w') as json_file:
-        json.dump(scraped_data, json_file, indent=4)
+    with open(os.path.join(json_folder_path, file_name), 'w') as json_file:
+        json.dump(data, json_file, indent=4)
         print("Data saved to JSON file data.json")
 
 
