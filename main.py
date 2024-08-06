@@ -20,25 +20,27 @@ def scrape_books(url, images_folder_path):
     books = soup.find_all('div', class_='kg-product-card-container')
     return [extract_book_data(book, images_folder_path) for book in books]
 
-
-
 def main():
     """
     Main function to scrape book data and save it.
     """
-    with Timer():
-        # Create necessary folders
-        create_folder_if_not_exists(JSON_FOLDER_PATH)
-        create_folder_if_not_exists(IMAGES_FOLDER_PATH)
+    try:
+        with Timer():
+            # Create necessary folders
+            create_folder_if_not_exists(JSON_FOLDER_PATH)
+            create_folder_if_not_exists(IMAGES_FOLDER_PATH)
 
-        # Scrape books data
-        print(f'Downloading html page: {URL} ...')
-        scraped_data = scrape_books(URL, IMAGES_FOLDER_PATH)
+            # Scrape books data
+            print(f'Downloading html page: {URL} ...')
+            scraped_data = scrape_books(URL, IMAGES_FOLDER_PATH)
 
-        # Save scraped data to JSON
-        json_file_path = get_file_path(JSON_FOLDER_PATH, 'books.json')
-        print('Writing JSON file ...')
-        save_json_file(scraped_data, file_path=json_file_path)
+            # Save scraped data to JSON
+            json_file_path = get_file_path(JSON_FOLDER_PATH, 'books.json')
+            print('Writing JSON file ...')
+            save_json_file(scraped_data, file_path=json_file_path)
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 if __name__ == '__main__':
     print('Booting up...')
