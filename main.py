@@ -1,9 +1,10 @@
-import time
 import os
 from config import JSON_FOLDER_PATH, IMAGES_FOLDER_PATH, URL
 from utils.file_utils import save_json_file, create_folder_if_not_exists
 from utils.web_utils import fetch_html_content
 from utils.data_extractors import extract_book_data
+from utils.timing_utils import Timer
+
 
 def scrape_books(url, images_folder_path):
     """
@@ -24,23 +25,18 @@ def main():
     """
     Main function to scrape book data and save it.
     """
-    start_time = time.time()
+    with Timer():
+        # Create necessary folders
+        create_folder_if_not_exists(JSON_FOLDER_PATH)
+        create_folder_if_not_exists(IMAGES_FOLDER_PATH)
 
-    # Create necessary folders
-    create_folder_if_not_exists(JSON_FOLDER_PATH)
-    create_folder_if_not_exists(IMAGES_FOLDER_PATH)
+        # Scrape books data
+        print(f'Downloading html page: {URL} ...')
+        scraped_data = scrape_books(URL, IMAGES_FOLDER_PATH)
 
-    # Scrape books data
-    print(f'Downloading html page: {URL} ...')
-    scraped_data = scrape_books(URL, IMAGES_FOLDER_PATH)
-
-    # Save scraped data to JSON
-    print('Writing JSON file ...')
-    save_json_file(scraped_data, file_path=os.path.join(JSON_FOLDER_PATH, 'books.json'))
-
-    # Calculate and print elapsed time
-    elapsed_time = time.time() - start_time
-    print(f"Took: {elapsed_time:.2f} seconds")
+        # Save scraped data to JSON
+        print('Writing JSON file ...')
+        save_json_file(scraped_data, file_path=os.path.join(JSON_FOLDER_PATH, 'books.json'))
 
 if __name__ == '__main__':
     print('Booting up...')
