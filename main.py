@@ -1,58 +1,17 @@
-import requests
-from bs4 import BeautifulSoup
-from PIL import Image
-from io import BytesIO
 import time
-import os
 from datetime import datetime
-from utils import save_json_file, create_folder_if_not_exists
+from config import JSON_FOLDER_PATH, IMAGES_FOLDER_PATH, URL
+from utils.file_utils import save_json_file, create_folder_if_not_exists
+from utils.image_utils import fetch_and_resize_image
+from utils.web_utils import fetch_html_content
 
-# Directory paths for saving JSON and image files
-JSON_FOLDER_PATH = "./generated/json/"
-IMAGES_FOLDER_PATH = "./generated/images/"
-# URL to scrape
-URL = "https://www.camelcodes.net/books/"
-
-def fetch_and_resize_image(image_url):
-    """
-    Fetch an image from a URL, resize it, and save it locally.
-    
-    Parameters:
-    image_url (str): URL of the image to fetch and resize.
-    
-    Returns:
-    str: The filename of the saved image.
-    """
-    response = requests.get(image_url)
-    image_data = response.content
-    image = Image.open(BytesIO(image_data))
-    image.thumbnail((400, 300))
-
-    file_name = os.path.basename(image_url)
-    file_path = os.path.join(IMAGES_FOLDER_PATH, file_name)
-    image.save(file_path, format="jpeg")
-    return file_name
-
-def fetch_html_content(url):
-    """
-    Fetch the HTML content of a given URL.
-    
-    Parameters:
-    url (str): The URL to fetch the HTML content from.
-    
-    Returns:
-    BeautifulSoup: Parsed HTML content.
-    """
-    response = requests.get(url)
-    html = response.content
-    return BeautifulSoup(html, 'html.parser')
-
-def extract_book_data(book):
+def extract_book_data(book, images_folder_path):
     """
     Extract data from a single book entry.
     
     Parameters:
     book (BeautifulSoup tag): A BeautifulSoup tag representing a book entry.
+    images_folder_path (str): Path to the folder where images will be saved.
     
     Returns:
     dict: Extracted data for the book.
@@ -73,7 +32,7 @@ def extract_book_data(book):
     buy_link_tag = book.find('a', class_='kg-product-card-button', href=True)
     buy_link = buy_link_tag['href'] if buy_link_tag else ''
 
-    thumbnail = fetch_and_resize_image(original_image_url)
+    thumbnail = fetch_and_resize_image(original_image_url, images_folder_path)
 
     return {
         'title': title,
@@ -85,19 +44,20 @@ def extract_book_data(book):
         'last_update_date': datetime.now().isoformat()
     }
 
-def scrape_books(url):
+def scrape_books(url, images_folder_path):
     """
     Scrape book data from the given URL.
     
     Parameters:
     url (str): The URL to scrape book data from.
+    images_folder_path (str): Path to the folder where images will be saved.
     
     Returns:
     list: A list of dictionaries containing scraped book data.
     """
     soup = fetch_html_content(url)
     books = soup.find_all('div', class_='kg-product-card-container')
-    return [extract_book_data(book) for book in books]
+    return [extract_book_data(book, images_folder_path) for book in books]
 
 def main():
     """
@@ -111,7 +71,7 @@ def main():
 
     # Scrape books data
     print(f'Downloading html page: {URL} ...')
-    scraped_data = scrape_books(URL)
+    scraped_data = scrape_books(URL, IMAGES_FOLDER_PATH)
 
     # Save scraped data to JSON
     print('Writing JSON file ...')
