@@ -23,3 +23,27 @@ def create_folder_if_not_exists(folder_path):
     """
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
+
+def get_file_path(*paths):
+    """
+    Combine paths into a single file path.
+    
+    Parameters:
+    *paths (str): Paths to be combined.
+    
+    Returns:
+    str: Combined file path.
+    """
+    return os.path.join(*paths)
+
+def get_directory_path(file_path):
+    """
+    Get the directory path from a file path.
+    
+    Parameters:
+    file_path (str): The file path.
+    
+    Returns:
+    str: The directory path.
+    """
+    return os.path.dirname(file_path)
