@@ -26,7 +26,6 @@ def fetch_and_resize_image(image_url):
     image.save(file_path, format="jpeg")
     return file_name
 
-
 def main():
     """Main function to scrape book data and save it."""
     start_time = time.time()
@@ -82,12 +81,11 @@ def main():
 
     # Save scraped data to JSON
     print('Writing JSON file ...')
-    save_json_file(scraped_data)
+    save_json_file(scraped_data, file_path=os.path.join(json_folder_path, 'books.json'))
 
     # Calculate and print elapsed time
     elapsed_time = time.time() - start_time
     print(f"Took: {elapsed_time:.2f} seconds")
-
 
 if __name__ == '__main__':
     print('Booting up...')
