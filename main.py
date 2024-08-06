@@ -1,4 +1,5 @@
 import time
+import os
 from datetime import datetime
 from config import JSON_FOLDER_PATH, IMAGES_FOLDER_PATH, URL
 from utils.file_utils import save_json_file, create_folder_if_not_exists
