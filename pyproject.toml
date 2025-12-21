@@ -14,5 +14,4 @@ classifiers = [
 dependencies = []
 
 [tool.setuptools]
-# Buraya paketinin icindeki dosya isimlerini (uzantisiz) yazman gerekiyor
-py-modules = ["string_utils"]
+packages = ["pykit"]
