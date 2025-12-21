@@ -207,3 +207,50 @@ def should_update(existing_date: datetime | str | None, new_date: datetime | str
     
     # Update if new date is newer
     return is_newer(new_date, existing_date)
+
+
+def from_timestamp(timestamp: float, format_string: str = "%Y-%m-%d %H:%M:%S") -> str:
+    """
+    Convert Unix timestamp to formatted date string.
+    
+    Args:
+        timestamp: Unix timestamp (seconds since epoch)
+        format_string: Output format (default: "YYYY-MM-DD HH:MM:SS")
+        
+    Returns:
+        Formatted date string
+        
+    Examples:
+        >>> from_timestamp(1703203200)
+        "2023-12-22 00:00:00"
+        >>> from_timestamp(1703203200, "%Y-%m-%d")
+        "2023-12-22"
+    """
+    dt_obj = datetime.fromtimestamp(timestamp)
+    return dt_obj.strftime(format_string)
+
+
+def to_timestamp(date_obj: datetime | str) -> float | None:
+    """
+    Convert datetime or date string to Unix timestamp.
+    
+    Args:
+        date_obj: datetime object or date string
+        
+    Returns:
+        Unix timestamp (seconds since epoch) or None if invalid
+        
+    Examples:
+        >>> to_timestamp(datetime(2023, 12, 22))
+        1703203200.0
+        >>> to_timestamp("2023-12-22 00:00:00")
+        1703203200.0
+    """
+    # Parse if string
+    if isinstance(date_obj, str):
+        date_obj = parse_datetime(date_obj)
+    
+    if not date_obj:
+        return None
+    
+    return date_obj.timestamp()
