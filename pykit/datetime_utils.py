@@ -115,3 +115,22 @@ def smart_format_datetime(date_obj: datetime | str | None, format_string: str = 
     
     # Format the datetime object
     return format_datetime(date_obj, format_string)
+
+
+def get_timestamp(format_string: str = "%Y-%m-%d %H:%M:%S") -> str:
+    """
+    Get current timestamp as formatted string.
+    
+    Args:
+        format_string: Output format (default: "YYYY-MM-DD HH:MM:SS")
+        
+    Returns:
+        Formatted current timestamp
+        
+    Examples:
+        >>> get_timestamp()
+        "2025-12-22 01:52:39"
+        >>> get_timestamp("%Y%m%d_%H%M%S")
+        "20251222_015239"
+    """
+    return now().strftime(format_string)
