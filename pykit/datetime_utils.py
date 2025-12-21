@@ -82,3 +82,36 @@ def now() -> datetime:
 def today() -> datetime:
     """Get today's date at midnight."""
     return datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+
+
+def smart_format_datetime(date_obj: datetime | str | None, format_string: str = "%Y-%m-%d %H:%M:%S") -> str | None:
+    """
+    Format datetime to string, accepting both datetime objects and date strings.
+    If a string is provided, it will be parsed first then formatted.
+    
+    Args:
+        date_obj: datetime object, date string, or None
+        format_string: Output format (default: STANDARD_DATE_FORMAT)
+        
+    Returns:
+        Formatted date string or None
+        
+    Examples:
+        >>> smart_format_datetime(datetime(2025, 9, 28, 7, 15, 21))
+        "2025-09-28 07:15:21"
+        >>> smart_format_datetime("2025-09-12T22:33:05.358621")
+        "2025-09-12 22:33:05"
+        >>> smart_format_datetime("28/09/2025", "%Y-%m-%d")
+        "2025-09-28"
+    """
+    if not date_obj:
+        return None
+    
+    # If string, parse it first
+    if isinstance(date_obj, str):
+        date_obj = parse_datetime(date_obj)
+        if not date_obj:
+            return None
+    
+    # Format the datetime object
+    return format_datetime(date_obj, format_string)
