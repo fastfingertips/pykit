@@ -197,3 +197,39 @@ def slugify(text: str, separator: str = '-', lowercase: bool = True) -> str:
     text = re.sub(f'{re.escape(separator)}+', separator, text)
     
     return text
+
+
+def extract_path_segment(url: str, after: str, before: str | None = None) -> str | None:
+    """
+    Extract a specific path segment from URL.
+    
+    Args:
+        url: URL to parse
+        after: Extract segment after this string (e.g., '/film/')
+        before: Optional - stop extraction before this string (e.g., '/', '?')
+        
+    Returns:
+        Extracted segment or None
+        
+    Examples:
+        >>> extract_path_segment("https://site.com/film/avatar-2009", after="/film/")
+        "avatar-2009"
+        >>> extract_path_segment("https://site.com/user/john/profile", after="/user/", before="/")
+        "john"
+    """
+    if not url or after not in url:
+        return None
+    
+    # Find the position after the 'after' string
+    start_pos = url.find(after) + len(after)
+    segment = url[start_pos:]
+    
+    # If 'before' is specified, cut at that point
+    if before and before in segment:
+        end_pos = segment.find(before)
+        segment = segment[:end_pos]
+    
+    # Clean up trailing slashes and query parameters
+    segment = segment.split('?')[0].split('#')[0].rstrip('/')
+    
+    return segment if segment else None
