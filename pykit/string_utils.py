@@ -88,13 +88,23 @@ def is_valid_url(url: str) -> bool:
         return False
 
 
-def is_domain_url(url: str, domains: str | list[str]) -> bool:
-    """Check if the URL belongs to specified domain(s)."""
+def is_domain_url(url: str, domains: str | list[str], must_contain: str | list[str] | None = None) -> bool:
+    """Check if URL belongs to domain(s) and optionally contains specific path segments."""
     if not is_valid_url(url):
         return False
     
+    url_lower = url.lower()
+    
+    # 1. Check domains (ANY match)
     if isinstance(domains, str):
         domains = [domains]
+    if not any(d.lower() in url_lower for d in domains):
+        return False
         
-    url_lower = url.lower()
-    return any(domain.lower() in url_lower for domain in domains)
+    # 2. Check required content (ANY match from the list)
+    if must_contain:
+        if isinstance(must_contain, str):
+            must_contain = [must_contain]
+        return any(c.lower() in url_lower for c in must_contain)
+    
+    return True
