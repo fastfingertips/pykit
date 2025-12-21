@@ -86,3 +86,15 @@ def is_valid_url(url: str) -> bool:
         return all([result.scheme, result.netloc])
     except Exception:
         return False
+
+
+def is_domain_url(url: str, domains: str | list[str]) -> bool:
+    """Check if the URL belongs to specified domain(s)."""
+    if not is_valid_url(url):
+        return False
+    
+    if isinstance(domains, str):
+        domains = [domains]
+        
+    url_lower = url.lower()
+    return any(domain.lower() in url_lower for domain in domains)
