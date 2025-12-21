@@ -134,3 +134,42 @@ def get_timestamp(format_string: str = "%Y-%m-%d %H:%M:%S") -> str:
         "20251222_015239"
     """
     return now().strftime(format_string)
+
+
+def is_newer(date1: datetime | str | None, date2: datetime | str | None) -> bool:
+    """
+    Check if first date is newer (more recent) than second date.
+    Accepts both datetime objects and date strings.
+    
+    Args:
+        date1: First date (datetime or string)
+        date2: Second date (datetime or string)
+        
+    Returns:
+        True if date1 is newer than date2
+        False if date1 is None or invalid
+        True if date2 is None or invalid (assuming date1 is valid)
+        
+    Examples:
+        >>> is_newer("2025-12-22", "2025-12-21")
+        True
+        >>> is_newer("2025-12-20", "2025-12-21")
+        False
+        >>> is_newer(datetime(2025, 12, 22), datetime(2025, 12, 21))
+        True
+    """
+    # Parse if strings
+    if isinstance(date1, str):
+        date1 = parse_datetime(date1)
+    if isinstance(date2, str):
+        date2 = parse_datetime(date2)
+    
+    # If first date is invalid, return False
+    if not date1:
+        return False
+    
+    # If second date is invalid but first is valid, return True
+    if not date2:
+        return True
+    
+    return date1 > date2
