@@ -254,3 +254,79 @@ def to_timestamp(date_obj: datetime | str) -> float | None:
         return None
     
     return date_obj.timestamp()
+
+
+def get_latest(*dates: datetime | str | None) -> datetime | str | None:
+    """
+    Get the most recent (latest) date from multiple dates.
+    Returns the date in its original format (datetime or string).
+    
+    Args:
+        *dates: Variable number of dates (datetime objects or strings)
+        
+    Returns:
+        The latest date in original format, or None if all dates are invalid
+        
+    Examples:
+        >>> get_latest("2025-12-20", "2025-12-22", "2025-12-21")
+        "2025-12-22"
+        >>> get_latest(datetime(2025, 12, 20), datetime(2025, 12, 22))
+        datetime(2025, 12, 22)
+        >>> get_latest(None, "invalid", "2025-12-22")
+        "2025-12-22"
+    """
+    valid_dates = []
+    
+    for date in dates:
+        if not date:
+            continue
+            
+        # Parse if string
+        parsed = parse_datetime(date) if isinstance(date, str) else date
+        
+        if parsed:
+            valid_dates.append((parsed, date))  # Store both parsed and original
+    
+    if not valid_dates:
+        return None
+    
+    # Find the latest date and return in original format
+    _, original = max(valid_dates, key=lambda x: x[0])
+    return original
+
+
+def get_earliest(*dates: datetime | str | None) -> datetime | str | None:
+    """
+    Get the oldest (earliest) date from multiple dates.
+    Returns the date in its original format (datetime or string).
+    
+    Args:
+        *dates: Variable number of dates (datetime objects or strings)
+        
+    Returns:
+        The earliest date in original format, or None if all dates are invalid
+        
+    Examples:
+        >>> get_earliest("2025-12-20", "2025-12-22", "2025-12-21")
+        "2025-12-20"
+        >>> get_earliest(datetime(2025, 12, 20), datetime(2025, 12, 22))
+        datetime(2025, 12, 20)
+    """
+    valid_dates = []
+    
+    for date in dates:
+        if not date:
+            continue
+            
+        # Parse if string
+        parsed = parse_datetime(date) if isinstance(date, str) else date
+        
+        if parsed:
+            valid_dates.append((parsed, date))  # Store both parsed and original
+    
+    if not valid_dates:
+        return None
+    
+    # Find the earliest date and return in original format
+    _, original = min(valid_dates, key=lambda x: x[0])
+    return original
