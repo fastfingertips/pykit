@@ -233,3 +233,45 @@ def extract_path_segment(url: str, after: str, before: str | None = None) -> str
     segment = segment.split('?')[0].split('#')[0].rstrip('/')
     
     return segment if segment else None
+
+
+def parse_url_path(url: str, positions: list[int] | dict[str, int]) -> dict[str, str | None] | list[str | None]:
+    """
+    Extract specific path segments from URL by position.
+    
+    Args:
+        url: URL to parse
+        positions: Either list of indices or dict mapping names to indices
+        
+    Returns:
+        Dict or list of extracted segments (None if position doesn't exist)
+        
+    Examples:
+        >>> parse_url_path("https://site.com/user/john/list/favorites", [0, 2])
+        ["user", "list"]
+        
+        >>> parse_url_path("https://letterboxd.com/aade/list/top-films", 
+        ...                {"username": 0, "list_slug": 2})
+        {"username": "aade", "list_slug": "top-films"}
+    """
+    if not url:
+        return {} if isinstance(positions, dict) else []
+    
+    try:
+        parsed = urlparse(url)
+        path = parsed.path.strip('/')
+        parts = path.split('/') if path else []
+        
+        # Dict mode: return named segments
+        if isinstance(positions, dict):
+            result = {}
+            for name, index in positions.items():
+                result[name] = parts[index] if 0 <= index < len(parts) else None
+            return result
+        
+        # List mode: return segments by indices
+        else:
+            return [parts[i] if 0 <= i < len(parts) else None for i in positions]
+            
+    except Exception:
+        return {} if isinstance(positions, dict) else []
