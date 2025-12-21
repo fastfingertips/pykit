@@ -131,3 +131,32 @@ def validate_url(url: str, allowed_domains: str | list[str] | None = None, must_
             return False, f"URL does not match required domain/content criteria{domain_msg}"
             
     return True, ""
+
+
+def build_url(base: str, *paths, trailing_slash: bool = True) -> str:
+    """
+    Construct a URL from base and path segments, handling slashes automatically.
+    
+    Args:
+        base: Base URL/Domain (e.g. "https://example.com")
+        *paths: Path segments (e.g. "user", "profile")
+        trailing_slash: Whether to end the URL with a slash
+        
+    Returns:
+        Joined URL
+    """
+    # Remove trailing slash from base
+    url = base.rstrip('/')
+    
+    for path in paths:
+        # Remove leading/trailing slashes from segments
+        clean_path = str(path).strip('/')
+        if clean_path:
+            url = f"{url}/{clean_path}"
+            
+    if trailing_slash and not url.endswith('/'):
+        url += '/'
+    elif not trailing_slash:
+        url = url.rstrip('/')
+        
+    return url
