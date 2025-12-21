@@ -1,4 +1,5 @@
 import re
+from urllib.parse import urlparse
 
 
 def extract_pattern(text: str, pattern: str, group: int = 1) -> str | None:
@@ -69,3 +70,19 @@ def clean_whitespace(text: str) -> str:
     text = re.sub(r'\s+', ' ', text)
     # Strip leading/trailing whitespace
     return text.strip()
+
+
+def is_valid_url(url: str) -> bool:
+    """Validate if the string is a properly formatted URL with scheme (http/https) and netloc."""
+    if not url or not isinstance(url, str):
+        return False
+    
+    url = url.strip()
+    if not url.startswith(('http://', 'https://')):
+        return False
+    
+    try:
+        result = urlparse(url)
+        return all([result.scheme, result.netloc])
+    except Exception:
+        return False
