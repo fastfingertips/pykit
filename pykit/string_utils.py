@@ -108,3 +108,26 @@ def is_domain_url(url: str, domains: str | list[str], must_contain: str | list[s
         return any(c.lower() in url_lower for c in must_contain)
     
     return True
+
+
+def validate_url(url: str, allowed_domains: str | list[str] | None = None, must_contain: str | list[str] | None = None) -> tuple[bool, str]:
+    """
+    Validate URL with optional domain and content checks.
+    
+    Returns:
+        tuple[bool, str]: (is_valid, error_message) - if valid, error_message is empty string.
+    """
+    if not url:
+        return False, "URL is required"
+    
+    url = url.strip()
+    
+    if not is_valid_url(url):
+        return False, "Invalid URL format (must start with http:// or https://)"
+    
+    if allowed_domains or must_contain:
+        if not is_domain_url(url, allowed_domains or [], must_contain):
+            domain_msg = f" ({allowed_domains})" if allowed_domains else ""
+            return False, f"URL does not match required domain/content criteria{domain_msg}"
+            
+    return True, ""
