@@ -173,3 +173,37 @@ def is_newer(date1: datetime | str | None, date2: datetime | str | None) -> bool
         return True
     
     return date1 > date2
+
+
+def should_update(existing_date: datetime | str | None, new_date: datetime | str | None) -> bool:
+    """
+    Determine if existing date should be updated with new date.
+    Returns True if new_date is newer than existing_date, or if existing_date is None/invalid.
+    
+    Args:
+        existing_date: Current/existing date (datetime or string)
+        new_date: New date to potentially update with (datetime or string)
+        
+    Returns:
+        True if update should happen, False otherwise
+        
+    Examples:
+        >>> should_update(None, "2025-12-22")
+        True  # No existing date, use new one
+        >>> should_update("2025-12-21", "2025-12-22")
+        True  # New date is newer
+        >>> should_update("2025-12-22", "2025-12-21")
+        False  # Existing date is already newer
+        >>> should_update("2025-12-22", None)
+        False  # No new date to update with
+    """
+    # If no existing date, update if new date exists
+    if not existing_date:
+        return bool(new_date)
+    
+    # If no new date, don't update
+    if not new_date:
+        return False
+    
+    # Update if new date is newer
+    return is_newer(new_date, existing_date)
