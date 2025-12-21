@@ -1,5 +1,6 @@
 import re
 from urllib.parse import urlparse
+import unicodedata
 
 
 def extract_pattern(text: str, pattern: str, group: int = 1) -> str | None:
@@ -160,3 +161,39 @@ def build_url(base: str, *paths, trailing_slash: bool = True) -> str:
         url = url.rstrip('/')
         
     return url
+
+
+def slugify(text: str, separator: str = '-', lowercase: bool = True) -> str:
+    """
+    Convert text to URL-friendly slug format.
+    Handles accented characters from all languages (Turkish, French, Spanish, etc.)
+    
+    Args:
+        text: Text to slugify
+        separator: Character to use as separator (default: '-')
+        lowercase: Convert to lowercase (default: True)
+        
+    Returns:
+        Slugified text
+    """
+    if not text:
+        return ""
+    
+    # Normalize Unicode characters (é -> e, ğ -> g, ñ -> n, etc.)
+    text = unicodedata.normalize('NFKD', text)
+    text = text.encode('ascii', 'ignore').decode('ascii')
+    
+    # Convert to lowercase if requested
+    if lowercase:
+        text = text.lower()
+    
+    # Replace non-alphanumeric characters with separator
+    text = re.sub(r'[^a-zA-Z0-9]+', separator, text)
+    
+    # Remove leading/trailing separators
+    text = text.strip(separator)
+    
+    # Collapse multiple separators into one
+    text = re.sub(f'{re.escape(separator)}+', separator, text)
+    
+    return text
