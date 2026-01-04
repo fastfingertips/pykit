@@ -127,3 +127,26 @@ def slugify(text: str, separator: str = '-', lowercase: bool = True) -> str:
     text = re.sub(f'{re.escape(separator)}+', separator, text)
     
     return text
+
+
+def is_valid_email(value: str) -> bool:
+    """
+    Check if the given string is a valid email address.
+    
+    Args:
+        value: String to validate
+        
+    Returns:
+        True if valid email format, False otherwise
+        
+    Examples:
+        >>> is_valid_email("user@example.com")
+        True
+        >>> is_valid_email("invalid-email")
+        False
+    """
+    if not value or not isinstance(value, str):
+        return False
+    
+    email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+    return bool(re.match(email_pattern, value))
