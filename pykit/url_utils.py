@@ -167,3 +167,31 @@ def parse_url_path(url: str, positions: list[int] | dict[str, int]) -> dict[str,
             
     except Exception:
         return {} if isinstance(positions, dict) else []
+
+
+def urls_match(url1: str, url2: str, ignore_trailing_slash: bool = True) -> bool:
+    """
+    Compare two URLs for equality.
+    
+    Args:
+        url1: First URL to compare
+        url2: Second URL to compare
+        ignore_trailing_slash: If True, treats 'example.com' and 'example.com/' as equal
+        
+    Returns:
+        True if URLs match, False otherwise
+        
+    Examples:
+        >>> urls_match("https://example.com", "https://example.com/")
+        True
+        >>> urls_match("https://example.com", "https://example.com/", ignore_trailing_slash=False)
+        False
+    """
+    if not url1 or not url2:
+        return url1 == url2
+    
+    if ignore_trailing_slash:
+        url1 = url1.rstrip('/')
+        url2 = url2.rstrip('/')
+    
+    return url1 == url2
