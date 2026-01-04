@@ -48,15 +48,36 @@ def extract_year(text: str, min_year: int = 1880, max_year: int = 2030) -> int |
         return None
 
 
-def extract_number_from_text(text: str) -> int | None:
-    """Extract the first number found in text."""
-    number_str = extract_pattern(text, r'(\d+)')
+def extract_number_from_text(text: str, join: bool = False) -> int | None:
+    """
+    Extract number from text.
     
-    if number_str:
-        try:
+    Args:
+        text (str): Input text
+        join (bool): If True, joins all found digits (e.g. 'S1 E5' -> 15).
+                     If False (default), extracts only the first number block (e.g. 'S1 E5' -> 1).
+                     Handles comma-separated numbers in both cases.
+                     
+    Returns:
+        int | None: Extracted number or None
+    """
+    if not text:
+        return None
+        
+    if join:
+        # Extract all digits
+        number_str = re.sub(r"[^0-9]", '', text)
+        if number_str:
             return int(number_str)
-        except ValueError:
-            pass
+    else:
+        # Extract first number block (supporting commas)
+        match = re.search(r'\d[\d,]*', text)
+        if match:
+            number_str = match.group().replace(',', '')
+            try:
+                return int(number_str)
+            except ValueError:
+                pass
     
     return None
 
