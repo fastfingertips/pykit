@@ -150,3 +150,22 @@ def is_valid_email(value: str) -> bool:
     
     email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
     return bool(re.match(email_pattern, value))
+
+
+def is_boolean(value) -> bool:
+    """
+    Check if the given value is a boolean.
+    
+    Args:
+        value: Value to check
+        
+    Returns:
+        True if value is a boolean, False otherwise
+        
+    Examples:
+        >>> is_boolean(True)
+        True
+        >>> is_boolean("true")
+        False
+    """
+    return isinstance(value, bool)
