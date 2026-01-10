@@ -169,3 +169,29 @@ def is_boolean(value) -> bool:
         False
     """
     return isinstance(value, bool)
+
+
+def is_null_or_empty(value) -> bool:
+    """Check if the given value is null or empty string."""
+    return value is None or value == ""
+
+
+def is_whitespace_or_empty(value) -> bool:
+    """Check if the given string is whitespace or empty."""
+    if not isinstance(value, str):
+        return False
+    return not value.strip()
+
+
+def is_non_negative_integer(value) -> bool:
+    """Check if the given value is a non-negative integer."""
+    return isinstance(value, int) and value >= 0
+
+
+def is_positive_float(value) -> bool:
+    """Check if the given value is a positive float."""
+    try:
+        number = float(value)
+        return number > 0
+    except (ValueError, TypeError):
+        return False
