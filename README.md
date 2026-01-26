@@ -1,6 +1,10 @@
 # fastfingertips
 python utility library
 
+[![PyPI version](https://img.shields.io/pypi/v/fastfingertips?color=blue)](https://pypi.org/project/fastfingertips/)
+[![License](https://img.shields.io/pypi/l/fastfingertips?color=blue)](https://pypi.org/project/fastfingertips/)
+[![Build Status](https://github.com/fastfingertips/fastfingertips-pypi/actions/workflows/pypi-publish.yml/badge.svg)](https://github.com/fastfingertips/fastfingertips-pypi/actions)
+
 A collection of personal Python utility functions to reduce code repetition.
 
 ## Installation
