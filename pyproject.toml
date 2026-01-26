@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pykit"
-version = "0.1.0"
+name = "fastfingertips"
+version = "0.1.1"
 description = "Personal Python utility library"
 readme = "README.md"
 requires-python = ">=3.7"
@@ -14,4 +14,4 @@ classifiers = [
 dependencies = []
 
 [tool.setuptools]
-packages = ["pykit"]
+packages = ["fastfingertips"]
