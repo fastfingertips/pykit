@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 from termcolor import colored
 
 
@@ -61,3 +62,16 @@ def print_status(message: str, success: bool = True) -> None:
     """Print a colored status message to the terminal."""
     color = "green" if success else "red"
     print(colored(message, color))
+
+
+def wait_with_progress(seconds: int, message: str = "Waiting") -> None:
+    """Wait for specified seconds with a visual progress bar."""
+    for i in range(seconds, 0, -1):
+        percent = (seconds - i) / seconds
+        bar_length = 20
+        filled_length = int(bar_length * percent)
+        bar = "=" * filled_length + "-" * (bar_length - filled_length)
+        sys.stdout.write(f"\r{message}: [{bar}] {i}s left   ")
+        sys.stdout.flush()
+        time.sleep(1)
+    sys.stdout.write(f"\r{message}: Done!                      \n")
