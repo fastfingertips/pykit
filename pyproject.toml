@@ -17,7 +17,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = []
+dependencies = [
+    "requests",
+    "beautifulsoup4"
+]
 
 [project.urls]
 Homepage = "https://github.com/fastfingertips/fastfingertips-pypi"
